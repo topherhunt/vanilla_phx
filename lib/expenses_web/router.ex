@@ -1,5 +1,6 @@
 defmodule ExpensesWeb.Router do
   use ExpensesWeb, :router
+  use Plug.ErrorHandler # for Rollbax
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -28,4 +29,6 @@ defmodule ExpensesWeb.Router do
   # scope "/api", ExpensesWeb do
   #   pipe_through :api
   # end
+
+  defp handle_errors(conn, data), do: MyAppWeb.ErrorPlugs.handle_errors(conn, data)
 end

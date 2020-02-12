@@ -21,6 +21,7 @@ config :expenses, ExpensesWeb.Endpoint,
       "--mode",
       "development",
       "--watch-stdin",
+      "--color", "--display-error-details",
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
@@ -53,7 +54,7 @@ config :expenses, ExpensesWeb.Endpoint,
 config :expenses, ExpensesWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css|scss|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/expenses_web/{live,views}/.*(ex)$",
       ~r"lib/expenses_web/templates/.*(eex)$"

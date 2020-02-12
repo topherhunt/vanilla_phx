@@ -19,6 +19,10 @@ defmodule Expenses.Application do
       # {Expenses.Worker, arg},
     ]
 
+    :ok = :telemetry.detach({Phoenix.Logger, [:phoenix, :socket_connected]})
+    :ok = :telemetry.detach({Phoenix.Logger, [:phoenix, :channel_joined]})
+    :ok = :telemetry.detach({Phoenix.Logger, [:phoenix, :router_dispatch, :start]})
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Expenses.Supervisor]

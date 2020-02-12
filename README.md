@@ -6,7 +6,8 @@ Last rebuilt 2020-02-12.
 
 How to start an app off of this vanilla template:
 
-  * clone it
+  * `git clone git@github.com:topherhunt/vanilla_phx.git my_folder_name`
+  * `cd my_folder_name`
   * find & replace all uses of "Vanilla" and "vanilla" with your app's name
   * rename folders & files in lib/ and test/ as above
   * Create secrets.exs from secrets.exs.template, fill it in as relevant

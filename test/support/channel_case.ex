@@ -1,4 +1,4 @@
-defmodule ExpensesWeb.ChannelCase do
+defmodule VanillaWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule ExpensesWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint ExpensesWeb.Endpoint
+      @endpoint VanillaWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Expenses.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Vanilla.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Expenses.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Vanilla.Repo, {:shared, self()})
     end
 
     :ok

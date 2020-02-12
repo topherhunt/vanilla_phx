@@ -1,4 +1,4 @@
-defmodule Expenses.DataCase do
+defmodule Vanilla.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule Expenses.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use ExpensesWeb.DataCase, async: true`, although
+  by setting `use VanillaWeb.DataCase, async: true`, although
   this option is not recommendded for other databases.
   """
 
@@ -18,21 +18,21 @@ defmodule Expenses.DataCase do
 
   using do
     quote do
-      alias Expenses.Repo
-      alias Expenses.Factory
+      alias Vanilla.Repo
+      alias Vanilla.Factory
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import Expenses.DataCase
+      import Vanilla.DataCase
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Expenses.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Vanilla.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Expenses.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Vanilla.Repo, {:shared, self()})
     end
 
     :ok

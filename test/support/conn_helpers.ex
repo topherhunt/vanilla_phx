@@ -1,10 +1,10 @@
-defmodule ExpensesWeb.ConnHelpers do
+defmodule VanillaWeb.ConnHelpers do
   use ExUnit.CaseTemplate
   use Phoenix.ConnTest
-  alias Expenses.Factory
-  alias ExpensesWeb.Router.Helpers, as: Routes
+  alias Vanilla.Factory
+  alias VanillaWeb.Router.Helpers, as: Routes
 
-  @endpoint ExpensesWeb.Endpoint
+  @endpoint VanillaWeb.Endpoint
 
   def login(conn, user) do
     # Plug.Conn.assign(conn, :current_user, user)

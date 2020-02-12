@@ -1,4 +1,4 @@
-defmodule Expenses.Repo.Migrations.CreateUsers do
+defmodule Vanilla.Repo.Migrations.CreateUsers do
   use Ecto.Migration
 
   def change do

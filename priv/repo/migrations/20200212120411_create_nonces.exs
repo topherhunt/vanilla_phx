@@ -1,4 +1,4 @@
-defmodule Expenses.Repo.Migrations.CreateNonces do
+defmodule Vanilla.Repo.Migrations.CreateNonces do
   use Ecto.Migration
 
   def change do

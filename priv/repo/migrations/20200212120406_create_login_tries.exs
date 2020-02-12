@@ -1,4 +1,4 @@
-defmodule Expenses.Repo.Migrations.CreateLoginTries do
+defmodule Vanilla.Repo.Migrations.CreateLoginTries do
   use Ecto.Migration
 
   def change do

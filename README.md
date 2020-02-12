@@ -1,20 +1,16 @@
-# Expenses
+# Vanilla Phoenix app
 
-To start your Phoenix server:
+This app was built by following the steps at https://github.com/topherhunt/cheatsheets/blob/master/elixir/howto/phoenix_new/phoenix_new.md.
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
+Last rebuilt 2020-02-12.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+How to start an app off of this vanilla template:
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+  * clone it
+  * find & replace all uses of "Vanilla" and "vanilla" with your app's name
+  * rename folders & files in lib/ and test/ as above
+  * Create secrets.exs from secrets.exs.template, fill it in as relevant
+  * `mix deps.get`
+  * `mix ecto.create`
+  * `mix ecto.migrate`
+  * `mix test` - around 30 tests should run; all should pass

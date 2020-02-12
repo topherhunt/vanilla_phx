@@ -1,27 +1,27 @@
-defmodule ExpensesWeb.IntegrationCase do
+defmodule VanillaWeb.IntegrationCase do
   use ExUnit.CaseTemplate
 
   using do
     quote do
       use Phoenix.ConnTest
       use Hound.Helpers # See https://github.com/HashNuke/hound for usage info
-      import Expenses.EmailHelpers
-      import ExpensesWeb.IntegrationHelpers
-      alias ExpensesWeb.Router.Helpers, as: Routes
-      alias Expenses.Factory
+      import Vanilla.EmailHelpers
+      import VanillaWeb.IntegrationHelpers
+      alias VanillaWeb.Router.Helpers, as: Routes
+      alias Vanilla.Factory
 
-      @endpoint ExpensesWeb.Endpoint
+      @endpoint VanillaWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Expenses.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Vanilla.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Expenses.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Vanilla.Repo, {:shared, self()})
     end
 
-    # Expenses.DataHelpers.empty_database()
+    # Vanilla.DataHelpers.empty_database()
     ensure_driver_running()
     System.put_env("SUPERADMIN_EMAILS", "superadmin@example.com")
     {:ok, conn: Phoenix.ConnTest.build_conn()}

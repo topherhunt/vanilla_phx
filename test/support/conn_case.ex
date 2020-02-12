@@ -1,4 +1,4 @@
-defmodule ExpensesWeb.ConnCase do
+defmodule VanillaWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule ExpensesWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use ExpensesWeb.ConnCase, async: true`, although
+  by setting `use VanillaWeb.ConnCase, async: true`, although
   this option is not recommendded for other databases.
   """
 
@@ -21,21 +21,21 @@ defmodule ExpensesWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import ExpensesWeb.ConnHelpers
-      import ExpensesWeb.EmailHelpers
-      alias ExpensesWeb.Router.Helpers, as: Routes
-      alias Expenses.Factory
+      import VanillaWeb.ConnHelpers
+      import VanillaWeb.EmailHelpers
+      alias VanillaWeb.Router.Helpers, as: Routes
+      alias Vanilla.Factory
 
       # The default endpoint for testing
-      @endpoint ExpensesWeb.Endpoint
+      @endpoint VanillaWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Expenses.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Vanilla.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Expenses.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Vanilla.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

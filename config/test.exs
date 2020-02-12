@@ -1,12 +1,12 @@
 use Mix.Config
 
 # Configure your database
-config :expenses, Expenses.Repo,
+config :vanilla, Vanilla.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   # long timeout to allow debugging in tests
   ownership_timeout: 20 * 60 * 1000
 
-config :expenses, ExpensesWeb.Endpoint,
+config :vanilla, VanillaWeb.Endpoint,
   http: [port: 4001], # must be 4001 for Chromedriver (I think)
   server: true # required by Hound
 

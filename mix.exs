@@ -1,9 +1,9 @@
-defmodule Expenses.MixProject do
+defmodule Vanilla.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :expenses,
+      app: :vanilla,
       version: "0.1.0",
       elixir: "1.8.2",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -19,7 +19,7 @@ defmodule Expenses.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Expenses.Application, []},
+      mod: {Vanilla.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

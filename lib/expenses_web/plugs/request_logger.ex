@@ -1,7 +1,7 @@
 # One-line full request logging inspired by Plug.Logger.
 # See https://github.com/elixir-plug/plug/blob/v1.8.0/lib/plug/logger.ex
 # Need to restart the server after updating this file.
-defmodule MyAppWeb.RequestLogger do
+defmodule ExpensesWeb.RequestLogger do
   require Logger
 
   @behaviour Plug

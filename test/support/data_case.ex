@@ -19,6 +19,7 @@ defmodule Expenses.DataCase do
   using do
     quote do
       alias Expenses.Repo
+      alias Expenses.Factory
 
       import Ecto
       import Ecto.Changeset

@@ -1,5 +1,5 @@
-defmodule MyApp.Mailer do
-  use Bamboo.Mailer, otp_app: :my_app
+defmodule Expenses.Mailer do
+  use Bamboo.Mailer, otp_app: :expenses
   require Logger
 
   def send(email) do

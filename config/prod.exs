@@ -19,7 +19,7 @@ config :expenses, ExpensesWeb.Endpoint,
 config :logger, level: :info
 
 # See https://hexdocs.pm/bamboo_smtp/Bamboo.SMTPAdapter.html#module-example-config
-config :my_app, MyApp.Mailer,
+config :expenses, Expenses.Mailer,
   adapter: Bamboo.SMTPAdapter,
   server: H.env!("SMTP_SERVER"),
   username: H.env!("SMTP_USERNAME"),

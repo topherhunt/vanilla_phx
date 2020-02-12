@@ -4,6 +4,7 @@ defmodule Expenses.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   def start(_type, _args) do
     build_info = Map.take(System.build_info, [:build, :otp_release])

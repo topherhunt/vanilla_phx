@@ -1,4 +1,4 @@
-defmodule MyAppWeb.ErrorPlugs do
+defmodule ExpensesWeb.ErrorPlugs do
   # Report each Plug request error to Rollbar.
   # This does NOT auto-report errors in unlinked background jobs, liveviews, etc.
   # See https://hexdocs.pm/rollbax/using-rollbax-in-plug-based-applications.html

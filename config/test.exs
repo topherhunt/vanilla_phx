@@ -6,7 +6,7 @@ config :expenses, Expenses.Repo,
   # long timeout to allow debugging in tests
   ownership_timeout: 20 * 60 * 1000
 
-config :worldviews, WorldviewsWeb.Endpoint,
+config :expenses, ExpensesWeb.Endpoint,
   http: [port: 4001], # must be 4001 for Chromedriver (I think)
   server: true # required by Hound
 

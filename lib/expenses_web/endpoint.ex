@@ -35,7 +35,7 @@ defmodule ExpensesWeb.Endpoint do
   plug Plug.Head
 
   # One-line request logging. Must come before the session & router plugs.
-  plug MyAppWeb.RequestLogger
+  plug ExpensesWeb.RequestLogger
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.

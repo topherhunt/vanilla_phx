@@ -21,7 +21,10 @@ defmodule ExpensesWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
+      import ExpensesWeb.ConnHelpers
+      import ExpensesWeb.EmailHelpers
       alias ExpensesWeb.Router.Helpers, as: Routes
+      alias Expenses.Factory
 
       # The default endpoint for testing
       @endpoint ExpensesWeb.Endpoint

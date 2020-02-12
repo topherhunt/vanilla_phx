@@ -19,7 +19,7 @@ config :expenses,
   ecto_repos: [Expenses.Repo]
 
 # Global config for the repo / db connection
-config :my_app, MyApp.Repo,
+config :expenses, Expenses.Repo,
   url: H.env!("DATABASE_URL"),
   # Heroku PG hobby-dev allows max 20 db connections
   pool_size: 10,
@@ -41,9 +41,9 @@ config :phoenix, :json_library, Jason
 
 # By default, sent emails are captured in a local process for later inspection.
 # Example:
-#   MyApp.AdminEmails.unknown_heats() |> MyApp.Mailer.deliver_now()
+#   Expenses.AdminEmails.unknown_heats() |> Expenses.Mailer.deliver_now()
 #   Bamboo.SentEmail.all() # => a list having one %Bamboo.Email{} struct
-config :my_app, MyApp.Mailer, adapter: Bamboo.LocalAdapter
+config :expenses, Expenses.Mailer, adapter: Bamboo.LocalAdapter
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

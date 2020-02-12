@@ -23,6 +23,7 @@ defmodule ExpensesWeb do
 
       import Plug.Conn
       import ExpensesWeb.Gettext
+      import ExpensesWeb.SentryPlugs
       alias ExpensesWeb.Router.Helpers, as: Routes
     end
   end
@@ -41,6 +42,7 @@ defmodule ExpensesWeb do
 
       import ExpensesWeb.ErrorHelpers
       import ExpensesWeb.Gettext
+      import ExpensesWeb.FormHelpers
       alias ExpensesWeb.Router.Helpers, as: Routes
     end
   end

@@ -6,6 +6,9 @@ defmodule Expenses.Application do
   use Application
 
   def start(_type, _args) do
+    build_info = Map.take(System.build_info, [:build, :otp_release])
+    Logger.info "#{__MODULE__}: Starting. #{inspect(build_info)}"
+
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository

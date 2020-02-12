@@ -5,7 +5,7 @@ defmodule Expenses.MixProject do
     [
       app: :expenses,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "1.8.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -42,7 +42,15 @@ defmodule Expenses.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:argon2_elixir, "~> 2.1.2"},
+      {:bamboo, "~> 1.3"},
+      {:bamboo_smtp, "~> 2.0"},
+      {:floki, "~> 0.24"},
+      {:nanoid, "~> 2.0"},
+      {:rollbax, "~> 0.11"},
+      {:timex, "~> 3.6.1"},
+      {:hound, "~> 1.0", only: :test}
     ]
   end
 

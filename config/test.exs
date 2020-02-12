@@ -2,17 +2,19 @@ use Mix.Config
 
 # Configure your database
 config :expenses, Expenses.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "expenses_test",
-  hostname: "localhost",
-  pool: Ecto.Adapters.SQL.Sandbox
+  pool: Ecto.Adapters.SQL.Sandbox,
+  # long timeout to allow debugging in tests
+  ownership_timeout: 20 * 60 * 1000
 
-# We don't run a server during test. If one is required,
-# you can enable the server option below.
-config :expenses, ExpensesWeb.Endpoint,
-  http: [port: 4002],
-  server: false
+config :worldviews, WorldviewsWeb.Endpoint,
+  http: [port: 4001], # must be 4001 for Chromedriver (I think)
+  server: true # required by Hound
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+# By default we use Chromedriver in headless mode.
+# Comment out the :browser key to default to headful mode for debugging tests.
+config :hound, driver: "chrome_driver", browser: "chrome_headless"
+
+config :rollbax, enabled: false

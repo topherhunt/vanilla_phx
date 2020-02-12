@@ -10,11 +10,25 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :expenses, ExpensesWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  http: [:inet6, port: System.get_env("PORT") || 4000],
+  url: [scheme: "https", host: H.env!("HOST_NAME"), port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+# See https://hexdocs.pm/bamboo_smtp/Bamboo.SMTPAdapter.html#module-example-config
+config :my_app, MyApp.Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: H.env!("SMTP_SERVER"),
+  username: H.env!("SMTP_USERNAME"),
+  password: H.env!("SMTP_PASSWORD"),
+  port: 587
+
+config :rollbax,
+  access_token: H.env!("ROLLBAR_ACCESS_TOKEN"),
+  environment: "prod"
 
 # ## SSL Support
 #
@@ -49,7 +63,3 @@ config :logger, level: :info
 #       force_ssl: [hsts: true]
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
-
-# Finally import the config/prod.secret.exs which loads secrets
-# and configuration from environment variables.
-import_config "prod.secret.exs"

@@ -40,7 +40,8 @@ defmodule ExpensesWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_expenses_key",
-    signing_salt: "MXugoW3b"
+    signing_salt: "MXugoW3b",
+    extra: "SameSite=Lax"
 
   plug ExpensesWeb.Router
 end

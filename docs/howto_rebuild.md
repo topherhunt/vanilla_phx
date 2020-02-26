@@ -1,14 +1,6 @@
 # How to set up my standard Phoenix app environment
 
-
-==================================================================================
-**TODO:**
-  - Go through this guide and update the wording to reflect the fact that this guide was moved into `vanilla_phx`
-  - Ensure any inlined code snippets reflect my recent changes to dev/test/prod config, the schema filtering system, the changeset scoping system, removal of fetchers from contexts, etc.
-==================================================================================
-
-
-Follow these steps to spin up a basic Phoenix app with my standard config and full email/PW auth system
+Follow these steps to spin up a basic Phoenix app with my standard config and full email/PW auth system. To minimize duplication, most steps will ask you to copy or reference some other file in this app.
 
 See also:
 

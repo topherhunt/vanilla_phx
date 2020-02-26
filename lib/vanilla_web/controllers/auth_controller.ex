@@ -6,7 +6,7 @@ defmodule VanillaWeb.AuthController do
   alias VanillaWeb.AuthPlugs
 
   def signup(conn, _params) do
-    changeset = Data.user_changeset(%User{}, :owner)
+    changeset = User.changeset(%User{}, %{}, :owner)
     render conn, "signup.html", changeset: changeset, page_title: gettext("Sign up")
   end
 
@@ -30,7 +30,7 @@ defmodule VanillaWeb.AuthController do
   end
 
   def login_submit(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    user = Data.get_user_by(email: email) # may be nil
+    user = Repo.get_by(User, email: email)
     pw_correct = Data.password_correct?(user, password)
     confirmed = user && user.confirmed_at != nil
     account_locked = Data.count_recent_login_tries(email) >= 5
@@ -78,7 +78,7 @@ defmodule VanillaWeb.AuthController do
   end
 
   def request_email_confirm_submit(conn, %{"user" => %{"email" => email}}) do
-    if user = Data.get_user_by(email: email) do
+    if user = Repo.get_by(User, email: email) do
       Vanilla.Emails.confirm_address(user, user.email) |> Vanilla.Mailer.send()
     end
 
@@ -92,7 +92,7 @@ defmodule VanillaWeb.AuthController do
   def confirm_email(conn, %{"token" => token}) do
     case Data.parse_token(token) do
       {:ok, {:confirm_email, user_id, email}} ->
-        user = Data.get_user!(user_id)
+        user = Repo.get!(User, user_id)
         attrs = %{email: email, confirmed_at: DateTime.utc_now()}
         # This can fail in a rare edge case when switching to a just-taken email address.
         Data.update_user!(user, attrs, :admin)
@@ -120,7 +120,7 @@ defmodule VanillaWeb.AuthController do
   end
 
   def request_password_reset_submit(conn, %{"user" => %{"email" => email}}) do
-    if user = Data.get_user_by(email: email) do
+    if user = Repo.get_by(User, email: email) do
       Vanilla.Emails.reset_password(user) |> Vanilla.Mailer.send()
     end
 
@@ -133,7 +133,7 @@ defmodule VanillaWeb.AuthController do
     case Data.parse_token(token) do
       {:ok, _} ->
         # If the pw reset token is valid, we render the form for the user to set a new pw.
-        changeset = Data.user_changeset(%User{}, :owner)
+        changeset = User.changeset(%User{}, %{}, :owner)
         title = gettext("Reset your password")
         render conn, "reset_password.html", token: token, changeset: changeset, page_title: title
 
@@ -147,7 +147,7 @@ defmodule VanillaWeb.AuthController do
   def reset_password_submit(conn, %{"token" => token, "user" => user_params}) do
     case Data.parse_token(token) do
       {:ok, {:reset_password, user_id}} ->
-        user = Data.get_user!(user_id)
+        user = Repo.get!(User, user_id)
         case Data.update_user(user, user_params, :password_reset) do
           {:ok, _} ->
             Data.clear_login_tries(user.email)

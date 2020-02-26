@@ -1,7 +1,10 @@
 use Mix.Config
 
-# Configure your database
+config :logger, level: :debug
+
 config :vanilla, Vanilla.Repo,
+  url: H.env!("DATABASE_URL"),
+  pool_size: 10,
   show_sensitive_data_on_connection_error: true
 
 # For development, we disable any cache and enable

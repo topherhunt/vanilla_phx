@@ -25,6 +25,7 @@ defmodule VanillaWeb.ConnCase do
       import VanillaWeb.EmailHelpers
       alias VanillaWeb.Router.Helpers, as: Routes
       alias Vanilla.Factory
+      alias Vanilla.Repo
 
       # The default endpoint for testing
       @endpoint VanillaWeb.Endpoint

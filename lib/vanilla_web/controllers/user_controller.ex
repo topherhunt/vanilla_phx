@@ -1,11 +1,12 @@
 defmodule VanillaWeb.UserController do
   use VanillaWeb, :controller
   alias Vanilla.Data
+  alias Vanilla.Data.User
 
   plug :must_be_logged_in
 
   def edit(conn, _params) do
-    changeset = Data.user_changeset(conn.assigns.current_user, :owner)
+    changeset = User.changeset(conn.assigns.current_user, %{}, :owner)
     render(conn, "edit.html", changeset: changeset)
   end
 
@@ -24,7 +25,7 @@ defmodule VanillaWeb.UserController do
   end
 
   def update_email(conn, %{"user" => %{"email" => email}}) do
-    if Data.count_users(email: email) == 0 do
+    if Repo.get_by(User, email: email) == nil do
       user = conn.assigns.current_user
       Vanilla.Emails.confirm_address(user, email) |> Vanilla.Mailer.send()
 

@@ -7,7 +7,9 @@ defmodule VanillaWeb.AuthPlugs do
       put_session: 3,
       configure_session: 2
     ]
+  alias Vanilla.Repo
   alias Vanilla.Data
+  alias Vanilla.Data.User
 
   #
   # Plugs
@@ -67,7 +69,7 @@ defmodule VanillaWeb.AuthPlugs do
     # To support "Log out of all sessions", we'd look up the user here by both id and a
     # session_token which we can scramble to destroy all login sessions.
     user_id = get_session(conn, :user_id)
-    Data.get_user_by(id: user_id)
+    Repo.get(User, user_id)
   end
 
   defp set_assigned_user(conn, user) do

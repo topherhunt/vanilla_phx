@@ -7,30 +7,17 @@ defmodule Vanilla.Data do
   # Users
   #
 
-  def get_user(id, filt \\ []), do: get_user_by(Keyword.merge([id: id], filt))
-  def get_user!(id, filt \\ []), do: get_user_by!(Keyword.merge([id: id], filt))
-  def get_user_by(filt), do: User |> User.apply_filters(filt) |> Repo.first()
-  def get_user_by!(filt), do: User |> User.apply_filters(filt) |> Repo.first!()
-  def get_users(filt \\ []), do: User |> User.apply_filters(filt) |> Repo.all()
-  def count_users(filt \\ []), do: User |> User.apply_filters(filt) |> Repo.count()
-
-  # New pattern: Each insert and update operation must provide a scope which is generally
-  # :admin or :owner. :admin scope allows updates to all fields and should never be used
-  # to pass user-defined params. :owner scope allows updates to only those fields which
-  # should be updatable by the authed user who owns that record.
-  def insert_user(params, s), do: user_changeset(%User{}, params, s) |> Repo.insert()
-  def insert_user!(params, s), do: user_changeset(%User{}, params, s) |> Repo.insert!()
-  def update_user(user, params, s), do: user_changeset(user, params, s) |> Repo.update()
-  def update_user!(user, params, s), do: user_changeset(user, params, s) |> Repo.update!()
-  def delete_user!(user), do: Repo.delete!(user)
-
-  def user_changeset(user, params \\ %{}, scope) do
-    case scope do
-      :admin -> User.admin_changeset(user, params)
-      :owner -> User.owner_changeset(user, params)
-      :password_reset -> User.password_reset_changeset(user, params)
-    end
+  def insert_user!(a \\ %User{}, b, c), do: insert_user(a, b, c) |> Repo.unwrap!()
+  def insert_user(%User{} = struct \\ %User{}, params, scope) do
+    struct |> User.changeset(params, scope) |> Repo.insert()
   end
+
+  def update_user!(a, b, c), do: update_user(a, b, c) |> Repo.unwrap!()
+  def update_user(%User{} = struct, params, scope) do
+    struct |> User.changeset(params, scope) |> Repo.update()
+  end
+
+  def delete_user!(user), do: Repo.delete!(user)
 
   def password_correct?(user_or_nil, password) do
     case Argon2.check_pass(user_or_nil, password) do

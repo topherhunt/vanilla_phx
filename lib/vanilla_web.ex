@@ -25,6 +25,7 @@ defmodule VanillaWeb do
       import VanillaWeb.Gettext
       import VanillaWeb.SentryPlugs
       alias VanillaWeb.Router.Helpers, as: Routes
+      alias Vanilla.Repo
     end
   end
 

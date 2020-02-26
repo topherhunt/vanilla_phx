@@ -16,13 +16,13 @@ defmodule VanillaWeb.Router do
     plug :accepts, ["json"]
   end
 
+  # In dev, preview all "sent" emails at localhost:4000/sent_emails
+  if Mix.env == :dev do
+    forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  end
+
   scope "/", VanillaWeb do
     pipe_through :browser
-
-    # In dev, preview all "sent" emails at localhost:4000/sent_emails
-    if Mix.env == :dev do
-      forward "/sent_emails", Bamboo.SentEmailViewerPlug
-    end
 
     get "/", PageController, :index
 

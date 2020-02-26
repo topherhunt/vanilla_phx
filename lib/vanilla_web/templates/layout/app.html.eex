@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Grassflog</title>
+    <title>Vanilla</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>">
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
@@ -56,9 +56,5 @@
 
       <%= render @view_module, @view_template, assigns %>
     </main>
-
-    <footer class="text-center small">
-      Built by <%= link "Topher Hunt", to: "http://topherhunt.com", target: "_blank" %>
-    </footer>
   </body>
 </html>

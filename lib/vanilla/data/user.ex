@@ -17,7 +17,7 @@ defmodule Vanilla.Data.User do
     timestamps()
   end
 
-  def admin_changeset(record, params \\ %{}) do
+  def changeset(record, params, :admin) do
     record
     |> cast(params, [:name, :email, :password, :confirmed_at, :last_visit_date])
     |> validate_required([:name, :email])
@@ -27,22 +27,26 @@ defmodule Vanilla.Data.User do
     |> hash_password_if_present()
   end
 
-  def owner_changeset(record, params \\ %{}) do
+  def changeset(record, params, :owner) do
     record
     |> cast(params, [:name, :email, :password, :password_confirmation, :current_password])
     |> disallow_email_change()
     |> validate_password_confirmation()
     |> validate_current_password()
-    |> admin_changeset(%{}) # hash password, require fields, etc.
+    |> changeset(%{}, :admin) # hash password, require fields, etc.
   end
 
   # We need a special context for pw resets because current_password isn't required there
-  def password_reset_changeset(record, params \\ %{}) do
+  def changeset(record, params, :password_reset) do
     record
     |> cast(params, [:password, :password_confirmation])
     |> validate_password_confirmation()
-    |> admin_changeset(%{}) # hash password, require fields, etc.
+    |> changeset(%{}, :admin) # hash password, require fields, etc.
   end
+
+  #
+  # Validation helpers
+  #
 
   defp hash_password_if_present(changeset) do
     if password = get_change(changeset, :password) do
@@ -71,10 +75,10 @@ defmodule Vanilla.Data.User do
   end
 
   defp validate_password_confirmation(changeset) do
-    password = get_change(changeset, :password)
-    password_confirmation = get_change(changeset, :password_confirmation)
+    pw = get_change(changeset, :password)
+    pw_confirmation = get_change(changeset, :password_confirmation)
 
-    if password != nil && password != password_confirmation do
+    if pw != nil && pw != pw_confirmation do
       add_error(changeset, :password_confirmation, dgettext("errors", "doesn't match password"))
     else
       changeset
@@ -84,12 +88,12 @@ defmodule Vanilla.Data.User do
   defp validate_current_password(changeset) do
     user = changeset.data
     is_user_persisted = user.id != nil
-    is_changing_password = get_change(changeset, :password) != nil
+    is_changing_pw = get_change(changeset, :password) != nil
 
-    if is_user_persisted && is_changing_password do
-      current_password = get_change(changeset, :current_password)
-      current_password_correct = Data.password_correct?(user, current_password)
-      if !current_password_correct do
+    if is_user_persisted && is_changing_pw do
+      current_pw = get_change(changeset, :current_password)
+      current_pw_correct = Data.password_correct?(user, current_pw)
+      if !current_pw_correct do
         add_error(changeset, :current_password, dgettext("errors", "is incorrect"))
       else
         changeset
@@ -103,8 +107,8 @@ defmodule Vanilla.Data.User do
   # Filters
   #
 
-  def apply_filters(starting_query, filters) do
-    Enum.reduce(filters, starting_query, fn {k, v}, query -> filter(query, k, v) end)
+  def filter(orig_query \\ __MODULE__, filters) when is_list(filters) do
+    Enum.reduce(filters, orig_query, fn {k, v}, query -> filter(query, k, v) end)
   end
 
   def filter(query, :id, id), do: where(query, [t], t.id == ^id)

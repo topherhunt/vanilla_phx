@@ -1,6 +1,7 @@
 defmodule VanillaWeb.UserControllerTest do
   use VanillaWeb.ConnCase
   alias Vanilla.Data
+  alias Vanilla.Data.User
 
   setup do
     # Clear all emails sent by previous tests. Tests CANNOT be async.
@@ -27,7 +28,7 @@ defmodule VanillaWeb.UserControllerTest do
       conn = patch(conn, Routes.user_path(conn, :update), params)
 
       assert redirected_to(conn) == Routes.user_path(conn, :edit)
-      updated_user = Data.get_user!(user.id)
+      updated_user = Repo.get!(User, user.id)
       assert updated_user.name == "New name"
       assert Data.password_correct?(updated_user, "password2")
     end
@@ -40,7 +41,7 @@ defmodule VanillaWeb.UserControllerTest do
       conn = patch(conn, Routes.user_path(conn, :update), params)
 
       assert redirected_to(conn) == Routes.user_path(conn, :edit)
-      assert Data.get_user!(user.id).name == "New name" # Name has changed
+      assert Repo.get!(User, user.id).name == "New name" # Name has changed
     end
 
     test "rejects if name is invalid", %{conn: conn} do
@@ -51,7 +52,7 @@ defmodule VanillaWeb.UserControllerTest do
       conn = patch(conn, Routes.user_path(conn, :update), params)
 
       assert_text conn, "can't be blank"
-      assert Data.get_user!(user.id).name == user.name # Name hasn't changed
+      assert Repo.get!(User, user.id).name == user.name # Name hasn't changed
     end
 
     test "rejects if updating password and current_password is incorrect", %{conn: conn} do
@@ -62,7 +63,7 @@ defmodule VanillaWeb.UserControllerTest do
       conn = patch(conn, Routes.user_path(conn, :update), params)
 
       assert_text conn, "is incorrect"
-      assert Data.get_user!(user.id) |> Data.password_correct?("password") # PW hasn't changed
+      assert Repo.get!(User, user.id) |> Data.password_correct?("password") # PW hasn't changed
     end
   end
 
@@ -76,7 +77,7 @@ defmodule VanillaWeb.UserControllerTest do
 
       assert redirected_to(conn) == Routes.user_path(conn, :edit)
       assert flash_messages(conn) =~ "We just sent a confirmation link"
-      assert Data.get_user!(user.id).email == user.email # email hasn't changed (yet)
+      assert Repo.get!(User, user.id).email == user.email # email hasn't changed (yet)
       assert_email_sent(to: "new_email@example.com", subject: "Please confirm your address")
     end
 

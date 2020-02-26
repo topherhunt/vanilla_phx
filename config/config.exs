@@ -15,15 +15,7 @@ end
 # Automatically load sensitive env variables if available (for dev and test)
 if File.exists?("config/secrets.exs"), do: import_config("secrets.exs")
 
-config :vanilla,
-  ecto_repos: [Vanilla.Repo]
-
-# Global config for the repo / db connection
-config :vanilla, Vanilla.Repo,
-  url: H.env!("DATABASE_URL"),
-  # Heroku PG hobby-dev allows max 20 db connections
-  pool_size: 10,
-  log: false
+config :vanilla, ecto_repos: [Vanilla.Repo]
 
 # Configures the endpoint
 config :vanilla, VanillaWeb.Endpoint,
@@ -33,8 +25,7 @@ config :vanilla, VanillaWeb.Endpoint,
   pubsub: [name: Vanilla.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
-config :logger, :console,
-  format: "$time $metadata[$level] $message\n"
+config :logger, :console, format: "$time $metadata[$level] $message\n"
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

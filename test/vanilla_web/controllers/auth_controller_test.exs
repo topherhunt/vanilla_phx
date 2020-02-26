@@ -1,6 +1,7 @@
 defmodule VanillaWeb.AuthControllerTest do
   use VanillaWeb.ConnCase
   alias Vanilla.Data
+  alias Vanilla.Data.User
 
   setup do
     # Clear all emails sent by previous tests. Tests CANNOT be async.
@@ -17,13 +18,13 @@ defmodule VanillaWeb.AuthControllerTest do
 
   describe "#signup_submit" do
     test "registers you and emails you a confirmation link", %{conn: conn} do
-      assert Data.count_users(email: "topher@example.com") == 0
+      assert User.filter(email: "topher@example.com") |> Repo.count() == 0
 
       params = %{"user" => %{"name" => "Topher", "email" => "topher@example.com", "password" => "password1", "password_confirmation" => "password1"}}
       conn = post(conn, Routes.auth_path(conn, :signup_submit), params)
 
       assert redirected_to(conn) =~ Routes.page_path(conn, :index)
-      assert Data.count_users(email: "topher@example.com") == 1
+      assert User.filter(email: "topher@example.com") |> Repo.count() == 1
       assert_email_sent(to: "topher@example.com", subject: "Please confirm your address")
       assert_logged_out(conn) # you aren't logged in, email confirmation is required
     end
@@ -33,7 +34,7 @@ defmodule VanillaWeb.AuthControllerTest do
       conn = post(conn, Routes.auth_path(conn, :signup_submit), params)
 
       assert_text conn, "can't be blank"
-      assert Data.count_users(email: "topher@example.com") == 0
+      assert User.filter(email: "topher@example.com") |> Repo.count() == 0
       assert count_emails_sent() == 0
     end
 
@@ -42,7 +43,7 @@ defmodule VanillaWeb.AuthControllerTest do
       conn = post(conn, Routes.auth_path(conn, :signup_submit), params)
 
       assert_text conn, "doesn't match password"
-      assert Data.count_users(email: "topher@example.com") == 0
+      assert User.filter(email: "topher@example.com") |> Repo.count() == 0
       assert count_emails_sent() == 0
     end
   end
@@ -234,7 +235,7 @@ defmodule VanillaWeb.AuthControllerTest do
 
       assert redirected_to(conn) == Routes.auth_path(conn, :login)
       assert flash_messages(conn) == "Password updated. Please log in."
-      assert Data.get_user!(user.id) |> Data.password_correct?("password2")
+      assert Repo.get!(User, user.id) |> Data.password_correct?("password2")
     end
 
     test "rejects you if the token is invalid", %{conn: conn} do
@@ -248,7 +249,7 @@ defmodule VanillaWeb.AuthControllerTest do
 
       assert redirected_to(conn) == Routes.auth_path(conn, :request_password_reset)
       assert flash_messages(conn) == "Sorry, something went wrong. Please try again."
-      assert !(Data.get_user!(user.id) |> Data.password_correct?("password2"))
+      assert !(Repo.get!(User, user.id) |> Data.password_correct?("password2"))
     end
 
     test "rejects you if the new password is invalid", %{conn: conn} do
@@ -261,7 +262,7 @@ defmodule VanillaWeb.AuthControllerTest do
       })
 
       assert_text conn, "doesn't match password"
-      assert !(Data.get_user!(user.id) |> Data.password_correct?("password2"))
+      assert !(Repo.get!(User, user.id) |> Data.password_correct?("password2"))
     end
   end
 end

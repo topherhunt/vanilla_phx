@@ -10,7 +10,7 @@ defmodule Vanilla.Repo do
   def first!(query), do: query |> limit(1) |> one!()
 
   # Unwraps the result tuple and blows up if an error occurred.
-  def ensure_success(result) do
+  def unwrap!(result) do
     case result do
       {:ok, object} -> object
       {:error, changeset} -> raise Ecto.InvalidChangesetError, changeset: changeset

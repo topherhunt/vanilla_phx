@@ -1,6 +1,6 @@
 # Vanilla Phoenix app
 
-This app was built by following the steps in `doc/howto_rebuild.md`. Last built 2020-02-12.
+This app was built by following the steps in [`doc/howto_rebuild.md`](https://github.com/topherhunt/vanilla_phx/blob/master/docs/howto_rebuild.md). Last built 2020-02-12.
 
 How to branch a new app based on this vanilla template:
 

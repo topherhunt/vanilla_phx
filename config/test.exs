@@ -18,3 +18,6 @@ config :vanilla, VanillaWeb.Endpoint,
 config :hound, driver: "chrome_driver", browser: "chrome_headless"
 
 config :rollbax, enabled: false
+
+# Weaker password hashing so tests run faster
+config :argon2_elixir, t_cost: 1, m_cost: 8

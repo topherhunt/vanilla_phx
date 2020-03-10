@@ -3,6 +3,7 @@ defmodule Vanilla.Repo do
     otp_app: :vanilla,
     adapter: Ecto.Adapters.Postgres
   import Ecto.Query
+  alias Vanilla.Helpers, as: H
 
   def count(query), do: query |> select([t], count(t.id)) |> one()
   def any?(query), do: count(query) >= 1
@@ -12,31 +13,33 @@ defmodule Vanilla.Repo do
   # Unwraps the result tuple and blows up if an error occurred.
   def unwrap!(result) do
     case result do
-      {:ok, object} -> object
+      {:ok, struct} -> struct
       {:error, changeset} -> raise Ecto.InvalidChangesetError, changeset: changeset
     end
   end
 
-  # Use this to sanitize user-submitted filters against a whitelist so you
-  # can include those filters in a query.
-  # Returns a kw list of filter instructions like [email_contains: "blah"].
-  # All keys are atoms. All values are (assumed to be) strings.
-  def prepare_filters(filters, opts) do
-    allowed = Keyword.fetch!(opts, :allowed)
-
-    cleaned = Enum.reduce(allowed, [], fn field, kwlist ->
-      value = filters[field]
-      if value != nil && value != "" do
-        Keyword.put(kwlist, String.to_atom(field), value)
+  # Sanitizes and casts user-submitted filters against the provided fields/types schema.
+  # Returns a kwlist that can be passed to a query builder function.
+  # Usage:
+  #   raw = %{"date_gte" => "2020-01-18"}
+  #   filters = Repo.cast_filters(raw, [date_gte: :date, name: :string])
+  #   => [date_gte: ~D[2020-01-18]]
+  def cast_filters(raw_filters, fields_and_types) do
+    Enum.reduce(fields_and_types, [], fn({field, type}, filters) ->
+      if raw_value = raw_filters |> Map.get(Atom.to_string(field)) |> H.presence() do
+        filters |> Keyword.put(field, cast_value(raw_value, type))
       else
-        kwlist
+        filters
       end
     end)
+  end
 
-    if cleaned != [] do
-      cleaned
-    else
-      opts[:default] || []
+  defp cast_value(raw_value, type) do
+    case type do
+      :string -> raw_value
+      :integer -> raw_value |> String.to_integer()
+      :date -> raw_value |> Date.from_iso8601!()
+      {:array, subtype} -> raw_value |> Enum.map(& cast_value(&1, subtype))
     end
   end
 

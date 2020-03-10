@@ -95,6 +95,8 @@ Next, set up your `config/` files as needed. Here's my standard setup:
     - Update the Endpoint config to `server: true` and port `4001`
     - Configure Hound
     - Disable Rollbax
+    - Configure argon2_elixir to use weaker hashing (so tests are faster)
+
 
   * Update `config/prod.exs` (see snippet). Considerations:
     - Update the Repo config

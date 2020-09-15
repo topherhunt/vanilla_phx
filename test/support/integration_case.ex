@@ -3,8 +3,9 @@ defmodule VanillaWeb.IntegrationCase do
 
   using do
     quote do
-      use Phoenix.ConnTest
       use Hound.Helpers # See https://github.com/HashNuke/hound for usage info
+      import Plug.Conn
+      import Phoenix.ConnTest
       import Vanilla.EmailHelpers
       import VanillaWeb.IntegrationHelpers
       alias VanillaWeb.Router.Helpers, as: Routes

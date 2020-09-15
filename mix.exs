@@ -33,24 +33,30 @@ defmodule Vanilla.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.4.11"},
-      {:phoenix_pubsub, "~> 1.1"},
-      {:phoenix_ecto, "~> 4.0"},
+      # Core
       {:ecto_sql, "~> 3.1"},
-      {:postgrex, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:argon2_elixir, "~> 2.1.2"},
+      {:phoenix, "~> 1.5"},
+      {:phoenix_ecto, "~> 4.0"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_view, "~> 0.14.2"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:plug_cowboy, "~> 2.3"},
+      {:postgrex, "~> 0.15"},
+
+      # Other
+      {:argon2_elixir, "~> 2.3"},
       {:bamboo, "~> 1.3"},
-      {:bamboo_smtp, "~> 2.0"},
+      {:bamboo_smtp, "~> 3.0"},
       {:floki, "~> 0.24"},
       {:nanoid, "~> 2.0"},
       {:rollbax, "~> 0.11"},
-      {:timex, "~> 3.6.1"},
-      {:hound, "~> 1.0", only: :test}
+      {:timex, "~> 3.6"},
+
+      # Dev & test
+      {:hound, "~> 1.0", only: :test},
+      {:phoenix_live_reload, "~> 1.2", only: :dev}
     ]
   end
 

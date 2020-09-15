@@ -12,10 +12,9 @@ defmodule Vanilla.Application do
 
     # List all child processes to be supervised
     children = [
-      # Start the Ecto repository
       Vanilla.Repo,
-      # Start the endpoint when the application starts
-      VanillaWeb.Endpoint
+      VanillaWeb.Endpoint,
+      {Phoenix.PubSub, name: Vanilla.PubSub}
       # Starts a worker by calling: Vanilla.Worker.start_link(arg)
       # {Vanilla.Worker, arg},
     ]

@@ -22,7 +22,8 @@ config :vanilla, VanillaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: H.env!("SECRET_KEY_BASE"),
   render_errors: [view: VanillaWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Vanilla.PubSub, adapter: Phoenix.PubSub.PG2]
+  live_view: [signing_salt: "44VO7xFnVR78VTOFLTeH8BnuFnWdt5H6"],
+  pubsub_server: Vanilla.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console, format: "$time $metadata[$level] $message\n"

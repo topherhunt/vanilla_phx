@@ -17,8 +17,8 @@ defmodule Vanilla.Data.User do
     timestamps()
   end
 
-  def changeset(record, params, :admin) do
-    record
+  def changeset(struct, params, :admin) do
+    struct
     |> cast(params, [:name, :email, :password, :confirmed_at, :last_visit_date])
     |> validate_required([:name, :email])
     |> validate_length(:password, min: 8, max: 50)
@@ -27,8 +27,8 @@ defmodule Vanilla.Data.User do
     |> hash_password_if_present()
   end
 
-  def changeset(record, params, :owner) do
-    record
+  def changeset(struct, params, :owner) do
+    struct
     |> cast(params, [:name, :email, :password, :password_confirmation, :current_password])
     |> disallow_email_change()
     |> validate_password_confirmation()
@@ -37,8 +37,8 @@ defmodule Vanilla.Data.User do
   end
 
   # We need a special context for pw resets because current_password isn't required there
-  def changeset(record, params, :password_reset) do
-    record
+  def changeset(struct, params, :password_reset) do
+    struct
     |> cast(params, [:password, :password_confirmation])
     |> validate_password_confirmation()
     |> changeset(%{}, :admin) # hash password, require fields, etc.

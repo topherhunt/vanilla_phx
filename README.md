@@ -6,6 +6,7 @@ How to branch a new app based on this vanilla template:
 
   * `git clone git@github.com:topherhunt/vanilla_phx.git my_folder_name`
   * `cd my_folder_name`
+  * `git remote remove origin`
   * find & replace all uses of "Vanilla" and "vanilla" with your app's name
   * rename folders & files in lib/ and test/ as above
   * Create secrets.exs from secrets.exs.template. Fill it in as relevant.

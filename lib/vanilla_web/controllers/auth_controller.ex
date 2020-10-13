@@ -30,7 +30,7 @@ defmodule VanillaWeb.AuthController do
   end
 
   def login_submit(conn, %{"user" => %{"email" => email, "password" => password}}) do
-    user = Repo.get_by(User, email: email)
+    user = User.filter(email: email) |> Repo.one() # may be nil
     pw_correct = Data.password_correct?(user, password)
     confirmed = user && user.confirmed_at != nil
     account_locked = Data.count_recent_login_tries(email) >= 5
@@ -78,7 +78,7 @@ defmodule VanillaWeb.AuthController do
   end
 
   def request_email_confirm_submit(conn, %{"user" => %{"email" => email}}) do
-    if user = Repo.get_by(User, email: email) do
+    if user = Repo.one(User.filter(email: email)) do
       Vanilla.Emails.confirm_address(user, user.email) |> Vanilla.Mailer.send()
     end
 
@@ -120,7 +120,7 @@ defmodule VanillaWeb.AuthController do
   end
 
   def request_password_reset_submit(conn, %{"user" => %{"email" => email}}) do
-    if user = Repo.get_by(User, email: email) do
+    if user = Repo.one(User.filter(email: email)) do
       Vanilla.Emails.reset_password(user) |> Vanilla.Mailer.send()
     end
 

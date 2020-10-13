@@ -11,5 +11,18 @@ defmodule Vanilla.Data.LoginTry do
     struct
     |> cast(params, [:email])
     |> validate_required([:email])
+    |> downcase_field(:email)
+  end
+
+  #
+  # Internal
+  #
+
+  defp downcase_field(changeset, field) do
+    if value = get_change(changeset, field) do
+      changeset |> put_change(field, String.downcase(value))
+    else
+      changeset
+    end
   end
 end

@@ -20,7 +20,7 @@ defmodule VanillaWeb.AuthControllerTest do
     test "registers you and emails you a confirmation link", %{conn: conn} do
       assert User.filter(email: "topher@example.com") |> Repo.count() == 0
 
-      params = %{"user" => %{"name" => "Topher", "email" => "topher@example.com", "password" => "password1", "password_confirmation" => "password1"}}
+      params = %{"user" => %{"name" => "Topher", "email" => "Topher@EXAMPLE.com", "password" => "password1", "password_confirmation" => "password1"}}
       conn = post(conn, Routes.auth_path(conn, :signup_submit), params)
 
       assert redirected_to(conn) =~ Routes.page_path(conn, :index)
@@ -69,7 +69,10 @@ defmodule VanillaWeb.AuthControllerTest do
 
     test "rejects you when your account is locked", %{conn: conn} do
       user = Factory.insert_user()
-      1..5 |> Enum.each(fn _i -> Factory.insert_login_try(email: user.email) end)
+
+      Enum.each(1..5, fn _i ->
+        Factory.insert_login_try(email: String.upcase(user.email))
+      end)
 
       params = %{"user" => %{"email" => user.email, "password" => "password"}}
       conn = post(conn, Routes.auth_path(conn, :login_submit), params)

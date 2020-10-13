@@ -96,15 +96,13 @@ defmodule Vanilla.Data do
   end
 
   def count_recent_login_tries(email) do
-    start_time = Timex.now() |> Timex.shift(minutes: -15)
-    LoginTry
-    |> where([t], t.email == ^email and t.inserted_at >= ^start_time)
-    |> Repo.count()
+    email = String.downcase(email)
+    time = Timex.now() |> Timex.shift(minutes: -15)
+    LoginTry |> where([t], t.email == ^email and t.inserted_at >= ^time) |> Repo.count()
   end
 
   def clear_login_tries(email) do
-    LoginTry
-    |> where([t], t.email == ^email)
-    |> Repo.delete_all()
+    email = String.downcase(email)
+    LoginTry |> where([t], t.email == ^email) |> Repo.delete_all()
   end
 end

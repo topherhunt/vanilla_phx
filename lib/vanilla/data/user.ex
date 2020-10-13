@@ -23,6 +23,7 @@ defmodule Vanilla.Data.User do
     |> validate_required([:name, :email])
     |> validate_length(:password, min: 8, max: 50)
     |> unique_constraint(:email)
+    |> downcase_field(:email)
     |> require_password()
     |> hash_password_if_present()
   end
@@ -30,10 +31,10 @@ defmodule Vanilla.Data.User do
   def changeset(struct, params, :owner) do
     struct
     |> cast(params, [:name, :email, :password, :password_confirmation, :current_password])
-    |> disallow_email_change()
+    |> disallow_field_change(:email)
     |> validate_password_confirmation()
     |> validate_current_password()
-    |> changeset(%{}, :admin) # hash password, require fields, etc.
+    |> changeset(%{}, :admin) # now do the standard validations & data prep steps
   end
 
   # We need a special context for pw resets because current_password isn't required there
@@ -41,7 +42,7 @@ defmodule Vanilla.Data.User do
     struct
     |> cast(params, [:password, :password_confirmation])
     |> validate_password_confirmation()
-    |> changeset(%{}, :admin) # hash password, require fields, etc.
+    |> changeset(%{}, :admin) # now do the standard validations & data prep steps
   end
 
   #
@@ -60,15 +61,6 @@ defmodule Vanilla.Data.User do
   defp require_password(changeset) do
     if !get_field(changeset, :password_hash) && !get_change(changeset, :password) do
       add_error(changeset, :password, dgettext("errors", "can't be blank"))
-    else
-      changeset
-    end
-  end
-
-  defp disallow_email_change(changeset) do
-    # Users can't directly change their email address after registering. UserController#update has logic for updating email via confirmation link.
-    if get_field(changeset, :id) && get_change(changeset, :email) do
-      add_error(changeset, :email, "can't be updated without a confirmation email")
     else
       changeset
     end
@@ -103,6 +95,23 @@ defmodule Vanilla.Data.User do
     end
   end
 
+  defp disallow_field_change(changeset, field) do
+    # Users can't directly change their email address after registering. UserController#update has logic for updating email via confirmation link.
+    if get_field(changeset, :id) && get_change(changeset, field) do
+      add_error(changeset, field, "can't be changed")
+    else
+      changeset
+    end
+  end
+
+  defp downcase_field(changeset, field) do
+    if value = get_change(changeset, field) do
+      changeset |> put_change(field, String.downcase(value))
+    else
+      changeset
+    end
+  end
+
   #
   # Filters
   #
@@ -111,6 +120,9 @@ defmodule Vanilla.Data.User do
     Enum.reduce(filters, orig_query, fn {k, v}, query -> filter(query, k, v) end)
   end
 
+  # TODO: Remove this?
   def filter(query, :id, id), do: where(query, [t], t.id == ^id)
-  def filter(query, :email, email), do: where(query, [t], t.email == ^email)
+
+  # Don't do Repo.get_by(User, email: email) because that's case-sensitive!
+  def filter(query, :email, e), do: where(query, [t], t.email == ^String.downcase(e))
 end

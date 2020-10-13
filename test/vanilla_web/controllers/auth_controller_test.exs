@@ -138,13 +138,14 @@ defmodule VanillaWeb.AuthControllerTest do
       assert_email_sent(to: user.email, subject: "Please confirm your address")
     end
 
-    test "does nothing if that email doesn't exist", %{conn: conn} do
+    test "shows error message if that email doesn't exist", %{conn: conn} do
       _user = Factory.insert_user()
 
       params = %{"user" => %{"email" => "incorrect@example.com"}}
       conn = post(conn, Routes.auth_path(conn, :request_email_confirm_submit), params)
 
       assert redirected_to(conn) == Routes.auth_path(conn, :request_email_confirm)
+      assert flash_messages(conn) =~ "doesn't exist in our system"
       assert count_emails_sent() == 0
     end
   end
@@ -193,13 +194,14 @@ defmodule VanillaWeb.AuthControllerTest do
       assert_email_sent(to: user.email, subject: "Use this link to reset your password")
     end
 
-    test "does nothing if that email doesn't exist", %{conn: conn} do
+    test "shows error if that email doesn't exist", %{conn: conn} do
       _user = Factory.insert_user()
 
       params = %{"user" => %{"email" => "incorrect@example.com"}}
       conn = post(conn, Routes.auth_path(conn, :request_password_reset_submit), params)
 
       assert redirected_to(conn) == Routes.auth_path(conn, :request_password_reset)
+      assert flash_messages(conn) =~ "doesn't exist in our system"
       assert count_emails_sent() == 0
     end
   end

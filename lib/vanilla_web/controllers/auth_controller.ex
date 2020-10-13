@@ -80,11 +80,16 @@ defmodule VanillaWeb.AuthController do
   def request_email_confirm_submit(conn, %{"user" => %{"email" => email}}) do
     if user = Repo.one(User.filter(email: email)) do
       Vanilla.Emails.confirm_address(user, user.email) |> Vanilla.Mailer.send()
-    end
 
-    conn
-    |> put_flash(:info, gettext("If that email address exists in our system, we just sent a confirmation link. Please check your inbox."))
-    |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
+      conn
+      |> put_flash(:info, gettext("We've emailed a link to %{email}. Please check your inbox.", email: user.email))
+      |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
+    else
+      # NOTE: Minor privacy hole (user enumeration)
+      conn
+      |> put_flash(:error, gettext("The email address '%{email}' doesn't exist in our system. Maybe you signed up using a different address?", email: email))
+      |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
+    end
   end
 
   # This endpoint can be called either to confirm the user's current email, or to change
@@ -122,11 +127,16 @@ defmodule VanillaWeb.AuthController do
   def request_password_reset_submit(conn, %{"user" => %{"email" => email}}) do
     if user = Repo.one(User.filter(email: email)) do
       Vanilla.Emails.reset_password(user) |> Vanilla.Mailer.send()
-    end
 
-    conn
-    |> put_flash(:info, gettext("If that email address exists in our system, we just sent a password reset link. Please check your inbox."))
-    |> redirect(to: Routes.auth_path(conn, :request_password_reset))
+      conn
+      |> put_flash(:info, gettext("We've emailed a link to %{email}. Please check your inbox.", email: user.email))
+      |> redirect(to: Routes.auth_path(conn, :request_password_reset))
+    else
+      # NOTE: Minor privacy hole (user enumeration)
+      conn
+      |> put_flash(:error, gettext("The email address '%{email}' doesn't exist in our system. Maybe you signed up using a different address?", email: email))
+      |> redirect(to: Routes.auth_path(conn, :request_password_reset))
+    end
   end
 
   def reset_password(conn, %{"token" => token}) do

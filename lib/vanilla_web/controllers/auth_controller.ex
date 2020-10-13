@@ -85,7 +85,7 @@ defmodule VanillaWeb.AuthController do
       |> put_flash(:info, gettext("We've emailed a link to %{email}. Please check your inbox.", email: user.email))
       |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
     else
-      # NOTE: Minor privacy hole (user enumeration)
+      # NOTE: Minor privacy hole. See https://security.stackexchange.com/q/158075
       conn
       |> put_flash(:error, gettext("The email address '%{email}' doesn't exist in our system. Maybe you signed up using a different address?", email: email))
       |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
@@ -132,7 +132,7 @@ defmodule VanillaWeb.AuthController do
       |> put_flash(:info, gettext("We've emailed a link to %{email}. Please check your inbox.", email: user.email))
       |> redirect(to: Routes.auth_path(conn, :request_password_reset))
     else
-      # NOTE: Minor privacy hole (user enumeration)
+      # NOTE: Minor privacy hole. See https://security.stackexchange.com/q/158075
       conn
       |> put_flash(:error, gettext("The email address '%{email}' doesn't exist in our system. Maybe you signed up using a different address?", email: email))
       |> redirect(to: Routes.auth_path(conn, :request_password_reset))

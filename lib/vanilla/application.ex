@@ -13,6 +13,7 @@ defmodule Vanilla.Application do
     # List all child processes to be supervised
     children = [
       Vanilla.Repo,
+      Vanilla.Telemetry,
       VanillaWeb.Endpoint,
       {Phoenix.PubSub, name: Vanilla.PubSub}
       # Starts a worker by calling: Vanilla.Worker.start_link(arg)

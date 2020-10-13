@@ -16,6 +16,7 @@ config :vanilla, VanillaWeb.Endpoint,
   url: [scheme: "https", host: H.env!("HOST_NAME"), port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
+  # TODO: Configure check_origin for better LiveDashboard security; see https://hexdocs.pm/phoenix_live_dashboard/Phoenix.LiveDashboard.html
 
 # See https://hexdocs.pm/bamboo_smtp/Bamboo.SMTPAdapter.html#module-example-config
 config :vanilla, Vanilla.Mailer,

@@ -2,6 +2,9 @@ defmodule VanillaWeb.Router do
   use VanillaWeb, :router
   use Plug.ErrorHandler # for Rollbax
   import VanillaWeb.AuthPlugs, only: [load_current_user: 2]
+  import Plug.BasicAuth
+  import Phoenix.LiveDashboard.Router
+  alias Vanilla.Helpers, as: H
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,9 +20,18 @@ defmodule VanillaWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :dashboard_auth do
+    plug :basic_auth, username: "admin", password: H.env!("DASHBOARD_PASSWORD")
+  end
+
   # In dev, preview all "sent" emails at localhost:4000/sent_emails
   if Mix.env == :dev do
     forward "/sent_emails", Bamboo.SentEmailViewerPlug
+  end
+
+  scope "/" do
+    pipe_through [:browser, :dashboard_auth]
+    live_dashboard "/dashboard", metrics: Vanilla.Telemetry
   end
 
   scope "/", VanillaWeb do

@@ -1,6 +1,6 @@
 defmodule VanillaWeb.ConnHelpers do
   use ExUnit.CaseTemplate
-  import Plug.Conn
+  # import Plug.Conn
   import Phoenix.ConnTest
   alias Vanilla.Factory
   alias VanillaWeb.Router.Helpers, as: Routes

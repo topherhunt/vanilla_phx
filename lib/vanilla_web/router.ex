@@ -39,6 +39,8 @@ defmodule VanillaWeb.Router do
 
     get "/", PageController, :index
 
+    live "/test_live", TestLive
+
     get "/auth/signup", AuthController, :signup
     post "/auth/signup", AuthController, :signup_submit
     get "/auth/login", AuthController, :login

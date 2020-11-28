@@ -8,6 +8,9 @@ defmodule VanillaWeb.ErrorPlugs do
       |> Plug.Conn.fetch_cookies()
       |> Plug.Conn.fetch_query_params()
 
+    user = conn.assigns[:current_user]
+    user_string = if user, do: "#{user.id}", else: "(none)"
+
     params =
       case conn.params do
         %Plug.Conn.Unfetched{aspect: :params} -> "unfetched"
@@ -21,7 +24,8 @@ defmodule VanillaWeb.ErrorPlugs do
         "user_ip" => List.to_string(:inet.ntoa(conn.remote_ip)),
         "headers" => Enum.into(conn.req_headers, %{}),
         "method" => conn.method,
-        "params" => params
+        "params" => params,
+        "user" => user_string
       }
     }
 

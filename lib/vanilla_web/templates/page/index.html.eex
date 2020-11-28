@@ -1,4 +1,8 @@
 <h1 class="text-center">Vanilla Homepage</h1>
 
 <a href="#" class="js-toggle-target" data-target="#hidden-section">Jquery listener test</a>
-<div id="hidden-section" class="u-hidden">Hidden section!</div>
+<div id="hidden-section" class="u-hidden">Hidden section!</div><br>
+
+<span class="u-tooltip-target">Test a one-line tooltip<div class="u-tooltip">Hello! What's up?</div></span><br>
+
+<span class="u-tooltip-target">Test a multi-line tooltip<div class="u-tooltip u-tooltip-multiline">The :layout option on use does not apply to LiveViews rendered within other LiveViews. If you want to render child live views or opt-in to a layout, use :layout as an option in mount.</div></span>

@@ -1,6 +1,7 @@
 /* This file is for your main application css. */
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-@import "layout.scss";
-@import "utilities.scss";
 @import "icons.scss";
+@import "layout.scss";
+@import "tooltips.scss";
+@import "utilities.scss";

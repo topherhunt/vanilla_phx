@@ -1,14 +1,14 @@
-<%# This inner layout is used for non-liveview / "normal" page renders. %>
+<%# This inner layout is used on all LiveView page renders. %>
 <%# More info: https://hexdocs.pm/phoenix_live_view/live-layouts.html %>
 
 <%= VanillaWeb.LayoutView.render "nav.html", current_user: @current_user %>
 
 <main class="container-fluid">
-  <%= if message = get_flash(@conn, :info) do %>
+  <%= if message = live_flash(@flash, :info) do %>
     <p class="alert alert-info" role="alert"><%= message %></p>
   <% end %>
 
-  <%= if message = get_flash(@conn, :error) do %>
+  <%= if message = live_flash(@flash, :error) do %>
     <p class="alert alert-danger" role="alert"><%= message %></p>
   <% end %>
 

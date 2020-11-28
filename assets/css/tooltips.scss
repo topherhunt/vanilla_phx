@@ -7,43 +7,42 @@
 //     <div class="u-tooltip">This tooltip will display when hovered</div>
 //   </span>
 //
-// Customizing:
-// - Override the width on u-tooltip to fit the context. (e.g. 10em may look better)
-// - Use .u-tooltip.u-tooltip-oneline for short, one-line tooltips (default is multiline)
-//
 // TODO: Check Gyld or WVJ for any styling improvements to incorporate
-// TODO: Make the tooltip oneline & auto width by default; multiline and set width is an override
 //
 .u-tooltip-target {
   position: relative;
   cursor: help;
 
   .u-tooltip {
+    display: block;
     position: absolute;
+    width: auto;
     bottom: 100%;
     left: 50%;
-    width: 20em;
     margin-left: -3em;
     margin-bottom: 10px;
-    display: block;
+    padding: 0.2rem 0.3rem;
+    z-index: 9999;
+
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
-    padding: 0.2rem 0.3rem;
     border-radius: 0.5rem;
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.6);
+
+    white-space: nowrap;
+    background-color: #000;
+    color: #fff;
     text-align: center;
     font-size: 0.8rem;
     font-weight: normal;
     line-height: 1rem;
-    background-color: #000;
-    color: #fff;
-    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.6);
-    z-index: 9999;
     pointer-events: none; // prevent clicks on tooltip from clicking the parent element
 
-    &.u-tooltip-oneline {
-      width: auto;
-      white-space: nowrap;
+    // For multi-line tooltips, add this class and override the width if desired.
+    &.u-tooltip-multiline {
+      width: 15em;
+      white-space: pre-wrap;
     }
   }
 

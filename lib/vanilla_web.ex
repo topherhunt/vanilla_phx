@@ -84,7 +84,7 @@ defmodule VanillaWeb do
       import Phoenix.LiveView.Helpers # live_render, live_component, live_patch, etc.
       import Phoenix.View # Basic rendering functionality (render, render_layout, etc)
       import VanillaWeb.ErrorHelpers
-      import VanillaWeb.FormHelpers
+      import VanillaWeb.MiscHelpers
       import VanillaWeb.Gettext
       alias VanillaWeb.Router.Helpers, as: Routes
     end

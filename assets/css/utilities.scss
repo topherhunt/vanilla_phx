@@ -23,6 +23,24 @@
 .u-abs-top-right { position: absolute; top: 0; right: 0; }
 
 //
+// Flexbox layout utils! (WIP)
+//
+
+.flex { display: flex; }
+
+.flex-v-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-30px { flex: 0 0 30px; } // fixed-width col, 30px
+.flex-75px { flex: 0 0 75px; } // fixed-width col, 75px
+.flex-12rem { flex: 0 0 12rem; } // fixed-width col, 12rem
+.flex-0 { flex: 0 } // fluid-width col (takes up minimum space needed)
+.flex-1 { flex: 1 } // fluid-width col (takes up all available space)
+
+//
 // Width
 //
 

@@ -34,6 +34,7 @@ defmodule Vanilla.MixProject do
   defp deps do
     [
       # Core
+      {:cowboy, "2.7.0"}, # 2.8.0 requires OTP 22+
       {:ecto_sql, "~> 3.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},

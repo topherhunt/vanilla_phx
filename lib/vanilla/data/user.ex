@@ -51,8 +51,7 @@ defmodule Vanilla.Data.User do
 
   defp hash_password_if_present(changeset) do
     if password = get_change(changeset, :password) do
-      hashed = Argon2.hash_pwd_salt(password)
-      changeset |> change(%{password: nil, password_hash: hashed})
+      changeset |> put_change(:password_hash, Argon2.hash_pwd_salt(password))
     else
       changeset
     end
@@ -66,6 +65,7 @@ defmodule Vanilla.Data.User do
     end
   end
 
+  # NOTE: There's also https://hexdocs.pm/ecto/Ecto.Changeset.html#validate_confirmation/3
   defp validate_password_confirmation(changeset) do
     pw = get_change(changeset, :password)
     pw_confirmation = get_change(changeset, :password_confirmation)
@@ -77,6 +77,7 @@ defmodule Vanilla.Data.User do
     end
   end
 
+  # TODO: See RTL's more up-to-date implementation of validate_password_change()
   defp validate_current_password(changeset) do
     user = changeset.data
     is_user_persisted = user.id != nil

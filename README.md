@@ -14,3 +14,8 @@ How to branch a new app based on this vanilla template:
   * `mix ecto.create`
   * `mix ecto.migrate`
   * `mix test` - around 30 tests should run; all should pass
+
+
+## TODO
+
+  * Shouldn't login_tries be indexed on [email, inserted_at] instead of just inserted_at?

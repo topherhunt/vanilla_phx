@@ -128,7 +128,7 @@ defmodule VanillaWeb.AuthControllerTest do
 
   describe "#request_email_confirm_submit" do
     test "sends the confirmation link if that email exists", %{conn: conn} do
-      user = Factory.insert_user()
+      user = Factory.insert_user(confirmed_at: nil)
 
       params = %{"user" => %{"email" => user.email}}
       conn = post(conn, Routes.auth_path(conn, :request_email_confirm_submit), params)

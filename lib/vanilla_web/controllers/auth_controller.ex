@@ -13,7 +13,7 @@ defmodule VanillaWeb.AuthController do
   def signup_submit(conn, %{"user" => user_params}) do
     case Data.insert_user(user_params, :owner) do
       {:ok, user} ->
-        Logger.info "#{__MODULE__}: Registered new user #{user.id}."
+        log :info, "Registered new user #{user.id}."
         Vanilla.Emails.confirm_address(user, user.email) |> Vanilla.Mailer.send()
 
         conn
@@ -37,26 +37,29 @@ defmodule VanillaWeb.AuthController do
 
     cond do
       account_locked ->
+        log :info, "Login failed: account is locked."
         conn
         |> put_flash(:error, gettext("Your account is locked. Please try again in 15 minutes, or reset your password using the link below."))
         |> redirect(to: Routes.auth_path(conn, :login))
 
       !pw_correct ->
+        log :info, "Login failed: incorrect email or password."
         Data.insert_login_try!(email)
         conn
         |> put_flash(:error, gettext("That email or password is incorrect. Please try again."))
         |> redirect(to: Routes.auth_path(conn, :login))
 
       !confirmed ->
+        log :info, "Login failed: user #{user.id} account is not confirmed."
         conn
         |> put_flash(:error, gettext("You need to confirm your email address before you can log in. Please check your inbox, or use this page to request a new confirmation link."))
         |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
 
       true ->
-        Logger.info "#{__MODULE__}: Logged in user #{user.id}."
+        log :info, "Logged in user #{user.id}."
         Data.clear_login_tries(email)
         conn
-        |> VanillaWeb.AuthPlugs.login!(user)
+        |> AuthPlugs.login!(user)
         |> put_flash(:info, gettext("Welcome back!"))
         |> redirect(to: Routes.page_path(conn, :index))
     end
@@ -64,7 +67,7 @@ defmodule VanillaWeb.AuthController do
 
   def logout(conn, _params) do
     conn
-    |> VanillaWeb.AuthPlugs.logout!()
+    |> AuthPlugs.logout!()
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
@@ -72,23 +75,33 @@ defmodule VanillaWeb.AuthController do
   # Email confirmation
   #
 
+  # This displays the "Re-send confirmation link" page
   def request_email_confirm(conn, _params) do
     title = gettext("Confirm your email address")
     render conn, "request_email_confirm.html", page_title: title
   end
 
+  # The user has submitted the "Re-send confirmation link" form
+  # NOTE: This allows user enumeration. See https://security.stackexchange.com/q/158075
   def request_email_confirm_submit(conn, %{"user" => %{"email" => email}}) do
-    if user = Repo.one(User.filter(email: email)) do
-      Vanilla.Emails.confirm_address(user, user.email) |> Vanilla.Mailer.send()
+    user = User.filter(email: email) |> Repo.one()
 
-      conn
-      |> put_flash(:info, gettext("We've emailed a link to %{email}. Please check your inbox.", email: user.email))
-      |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
-    else
-      # NOTE: Minor privacy hole. See https://security.stackexchange.com/q/158075
-      conn
-      |> put_flash(:error, gettext("The email address '%{email}' doesn't exist in our system. Maybe you signed up using a different address?", email: email))
-      |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
+    cond do
+      user == nil ->
+        conn
+        |> put_flash(:error, gettext("The email address '%{email}' doesn't exist in our system. Maybe you signed up using a different address?", email: email))
+        |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
+
+      user.confirmed_at != nil ->
+        conn
+        |> put_flash(:error, gettext("This address is already confirmed. Log in below.", email: email))
+        |> redirect(to: Routes.auth_path(conn, :login))
+
+      true ->
+        Vanilla.Emails.confirm_address(user, user.email) |> Vanilla.Mailer.send()
+        conn
+        |> put_flash(:info, gettext("We've emailed a link to %{email}. Please check your inbox.", email: user.email))
+        |> redirect(to: Routes.auth_path(conn, :request_email_confirm))
     end
   end
 
@@ -98,9 +111,8 @@ defmodule VanillaWeb.AuthController do
     case Data.parse_token(token) do
       {:ok, {:confirm_email, user_id, email}} ->
         user = Repo.get!(User, user_id)
-        attrs = %{email: email, confirmed_at: DateTime.utc_now()}
         # This can fail in a rare edge case when switching to a just-taken email address.
-        Data.update_user!(user, attrs, :admin)
+        Data.update_user!(user, %{email: email, confirmed_at: DateTime.utc_now()}, :admin)
         Data.invalidate_token!(token)
 
         conn
@@ -119,6 +131,7 @@ defmodule VanillaWeb.AuthController do
   # Password resets
   #
 
+  # Displays the form for requesting a password reset link.
   def request_password_reset(conn, _params) do
     title = gettext("Reset your password")
     render conn, "request_password_reset.html", page_title: title
@@ -139,13 +152,15 @@ defmodule VanillaWeb.AuthController do
     end
   end
 
+  # Displays the form for actually resetting your password. (accessed via PW reset link)
   def reset_password(conn, %{"token" => token}) do
     case Data.parse_token(token) do
-      {:ok, _} ->
+      {:ok, {:reset_password, _user_id}} ->
         # If the pw reset token is valid, we render the form for the user to set a new pw.
-        changeset = User.changeset(%User{}, %{}, :owner)
-        title = gettext("Reset your password")
-        render conn, "reset_password.html", token: token, changeset: changeset, page_title: title
+        render conn, "reset_password.html",
+          token: token,
+          changeset: User.changeset(%User{}, %{}, :owner),
+          page_title: gettext("Reset your password")
 
       {:error, _} ->
         conn
@@ -178,4 +193,10 @@ defmodule VanillaWeb.AuthController do
         |> redirect(to: Routes.auth_path(conn, :request_password_reset))
     end
   end
+
+  #
+  # Helpers
+  #
+
+  defp log(level, message), do: Logger.log(level, "AuthController: #{message}")
 end

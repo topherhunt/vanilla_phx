@@ -18,6 +18,9 @@ config :vanilla, VanillaWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
   # TODO: Configure check_origin for better LiveDashboard security; see https://hexdocs.pm/phoenix_live_dashboard/Phoenix.LiveDashboard.html
 
+# Heroku Postgres now requires the ssl option.
+config :vanilla, Vanilla.Repo, ssl: true
+
 # See https://hexdocs.pm/bamboo_smtp/Bamboo.SMTPAdapter.html#module-example-config
 config :vanilla, Vanilla.Mailer,
   adapter: Bamboo.SMTPAdapter,

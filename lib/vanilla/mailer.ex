@@ -21,5 +21,5 @@ defmodule Vanilla.Mailer do
     "to: #{to}, template: #{module}.#{template}, subject: \"#{email.subject}\")"
   end
 
-  defp log(level, msg), do: Logger.log(level, "Worldviews.Mailer: #{msg}")
+  defp log(level, msg), do: Logger.log(level, "Vanilla.Mailer: #{msg}")
 end

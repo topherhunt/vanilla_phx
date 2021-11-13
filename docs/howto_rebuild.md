@@ -309,7 +309,7 @@ Views & templates
   * Copy all auth templates snippets: `lib/my_app_web/templates/auth/*`
   * Copy all email templates snippets: `lib/my_app_web/templates/emails/*`
   * Copy snippet: `lib/my_app_web/templates/user/edit.html.eex`
-  * In `lib/my_app_web/my_app_web.ex`, in the `view` quote, add: `import MyAppWeb.FormHelpers`
+  * In `lib/my_app_web/my_app_web.ex`, in the `view` quote, add: `import MyAppWeb.MiscHelpers`
 
 Email sending:
 

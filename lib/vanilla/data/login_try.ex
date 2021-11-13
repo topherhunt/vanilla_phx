@@ -1,3 +1,4 @@
+# Tracks login attempts for a specific email address so we can block brute-force attacks.
 defmodule Vanilla.Data.LoginTry do
   use Ecto.Schema
   import Ecto.Changeset

@@ -13,9 +13,9 @@ defmodule VanillaWeb.TestLive do
     """
   end
 
-  def mount(params, assigns, socket) do
-    IO.inspect(params, label: "params")
-    IO.inspect(assigns, label: "assigns")
+  # `params` is only present when router-mounted.
+  def mount(_params, session, socket) do
+    IO.inspect(session, label: "session")
 
     socket
     |> assign(current_user: nil)

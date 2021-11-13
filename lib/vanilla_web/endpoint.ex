@@ -33,12 +33,18 @@ defmodule VanillaWeb.Endpoint do
     plug Phoenix.CodeReloader
   end
 
+  plug VanillaWeb.RejectSpamUrls
+
   plug Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
     cookie_key: "request_logger"
 
-  plug Plug.RequestId
+  plug Plug.RequestId # TODO: Remove?
   # plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
+
+  # Custom one-line request logging.
+  # Must come before the session & router plugs. (the actual logging takes place later)
+  plug VanillaWeb.RequestLogger
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
@@ -47,9 +53,6 @@ defmodule VanillaWeb.Endpoint do
 
   plug Plug.MethodOverride
   plug Plug.Head
-
-  # One-line request logging. Must come before the session & router plugs.
-  plug VanillaWeb.RequestLogger
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.

@@ -15,7 +15,8 @@ defmodule VanillaWeb.AuthPlugs do
   # Plugs
   #
 
-  # Assign current_user to the conn, if a user is logged in
+  # Assign current_user to the conn, if a user is logged in.
+  # Called in the router's :browser pipeline; not intended for use directly in controllers.
   def load_current_user(conn, _opts) do
     cond do
       # If a user is already loaded, nothing to do

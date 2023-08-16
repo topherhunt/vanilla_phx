@@ -7,8 +7,8 @@ defmodule Vanilla.Mailer do
       deliver_now(email)
       log :info, "Sent #{describe_email(email)}"
       {:ok}
-    # SMTP failures may raise ErlangErrors which need to be caught rather than rescued (?)
     catch e ->
+      # SMTP failures may raise ErlangErrors which need to be caught rather than rescued (?)
       log :warn, "Error sending email #{describe_email(email)}: #{inspect(e)}"
       {:error, e}
     end

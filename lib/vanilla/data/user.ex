@@ -17,6 +17,7 @@ defmodule Vanilla.Data.User do
     timestamps()
   end
 
+  # TODO: This changeset 3rd scope param isn't working. Try moving back to a more standard pattern with `admin_changeset`, `registration_changeset`, `user_update_changeset` etc.
   def changeset(struct, params, :admin) do
     struct
     |> cast(params, [:name, :email, :password, :confirmed_at, :last_visit_date])
